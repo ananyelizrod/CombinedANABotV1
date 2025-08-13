@@ -24,13 +24,13 @@ import hashlib
 try:
     import fitz  # PyMuPDF
 except ImportError:
-    print("❌ PyMuPDF not found. Install with: pip install PyMuPDF")
+    print(" PyMuPDF not found. Install with: pip install PyMuPDF")
     exit(1)
 
 try:
     from langchain.text_splitter import RecursiveCharacterTextSplitter
 except ImportError:
-    print("⚠️  LangChain not found. Using simple text splitting.")
+    print("  LangChain not found. Using simple text splitting.")
     print("   For better chunking, install with: pip install langchain")
     RecursiveCharacterTextSplitter = None
 
@@ -295,16 +295,16 @@ class PDFConverter:
 
             # Save files for A.N.A. Bot
             np.save("embeddings.npy", embeddings)
-            self.logger.info("✅ Saved embeddings.npy")
+            self.logger.info(" Saved embeddings.npy")
 
             with open("metadata.json", 'w', encoding='utf-8') as f:
                 json.dump(chunks, f, ensure_ascii=False, indent=2)
-            self.logger.info("✅ Saved metadata.json")
+            self.logger.info(" Saved metadata.json")
 
             faiss.write_index(index, "index.faiss")
-            self.logger.info("✅ Saved index.faiss")
+            self.logger.info(" Saved index.faiss")
 
-            self.logger.info(f"🎉 A.N.A. Bot files ready! ({len(chunks)} chunks, {dimension}D embeddings)")
+            self.logger.info(f" A.N.A. Bot files ready! ({len(chunks)} chunks, {dimension}D embeddings)")
             return True
 
         except Exception as e:
@@ -364,20 +364,20 @@ Examples:
 
     # Check for manuals directory
     if not Path(args.manuals_dir).exists():
-        print(f"📁 Creating '{args.manuals_dir}' directory...")
+        print(f" Creating '{args.manuals_dir}' directory...")
         Path(args.manuals_dir).mkdir(exist_ok=True)
         print(f"   Please add PDF files to '{args.manuals_dir}' and run again.")
         return
 
     pdf_files = list(Path(args.manuals_dir).glob("*.pdf"))
     if not pdf_files:
-        print(f"📁 No PDF files found in '{args.manuals_dir}'")
+        print(f" No PDF files found in '{args.manuals_dir}'")
         print(f"   Please add PDF files and run again.")
         return
 
-    print(f"📚 Found {len(pdf_files)} PDF file(s):")
+    print(f" Found {len(pdf_files)} PDF file(s):")
     for pdf in pdf_files:
-        print(f"   📄 {pdf.name}")
+        print(f"    {pdf.name}")
 
     # Initialize converter
     converter = PDFConverter(
@@ -387,29 +387,29 @@ Examples:
     )
 
     # Process PDFs
-    print(f"\n🔄 Processing PDFs...")
+    print(f"\n Processing PDFs...")
     chunks = converter.process_manuals_directory(args.manuals_dir)
 
     if not chunks:
-        print("❌ No chunks were extracted from PDFs")
+        print(" No chunks were extracted from PDFs")
         return
 
     # Save JSON (always)
     json_file = converter.save_json(chunks)
     if json_file:
-        print(f"✅ JSON saved: {json_file}")
+        print(f" JSON saved: {json_file}")
 
     # Create A.N.A. Bot files if requested
     if args.create_embeddings:
-        print(f"\n🧠 Creating embeddings for A.N.A. Bot...")
+        print(f"\n Creating embeddings for A.N.A. Bot...")
         success = converter.create_ana_bot_files(chunks, args.embedding_model)
 
         if success:
-            print(f"\n🎉 A.N.A. Bot is ready!")
-            print(f"   📄 Files created: embeddings.npy, metadata.json, index.faiss")
-            print(f"   🚀 Start your A.N.A. Bot: python ana_bot.py")
+            print(f"\n A.N.A. Bot is ready!")
+            print(f"    Files created: embeddings.npy, metadata.json, index.faiss")
+            print(f"    Start your A.N.A. Bot: python ana_bot.py")
         else:
-            print(f"\n❌ Failed to create embeddings")
+            print(f"\n Failed to create embeddings")
             return
     else:
         print(f"\n💡 To create embeddings for A.N.A. Bot:")
@@ -417,14 +417,15 @@ Examples:
 
     # Show statistics
     if args.stats:
-        print(f"\n📊 Processing Statistics:")
+        print(f"\n Processing Statistics:")
         stats = converter.get_statistics(chunks)
         for key, value in stats.items():
             if key != "sources":
                 print(f"   {key.replace('_', ' ').title()}: {value}")
 
-    print(f"\n✨ PDF conversion complete!")
+    print(f"\n PDF conversion complete!")
 
 
 if __name__ == "__main__":
+
     main()
