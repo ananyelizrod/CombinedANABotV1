@@ -2,6 +2,8 @@
  tool that converts PDF manuals into structured JSON metadata and generates embeddings compatible with the existing A.N.A Bot program. Contains both components of the project, creating and usage. 
 
 You need to add a directory within your project named manuals with the PDF's inside.
+You'd also need to download ollama, but there've been talks of being able to obtain an API key and possibly get a better 
+AI for the program. 
 
 You don't need the metadata, embeddings, and index files I've included. If you download the converters requirements and run the converter with a different set of PDF's in there, it will create those respective files :) 
 
