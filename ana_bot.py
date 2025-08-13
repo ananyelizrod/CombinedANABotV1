@@ -10,8 +10,7 @@ Prerequisites:
 Usage:
     python ana_bot.py
 """ 
-# To run the program, I recommend using the live shareable link as opposed to the local host, I haven't been able
-# to figure out why but the live works all of the time and the local only works sometimes. 
+# Is made for running locally 
 
 import os
 import faiss
@@ -312,7 +311,8 @@ if __name__ == "__main__":
     interface.launch(
         server_name="0.0.0.0",
         server_port=7860,
-        share=True,
+        share=False,
         debug=True
 
     )
+
