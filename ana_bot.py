@@ -9,7 +9,9 @@ Prerequisites:
 
 Usage:
     python ana_bot.py
-"""
+""" 
+# To run the program, I recommend using the live shareable link as opposed to the local host, I haven't been able
+# to figure out why but the live works all of the time and the local only works sometimes. 
 
 import os
 import faiss
@@ -22,6 +24,7 @@ from langchain_ollama import OllamaLLM
 
 
 # Function to convert image to base64
+# (for the FDOT logo for the header of the test website) 
 def image_to_base64(image_path):
     try:
         with open(image_path, "rb") as img_file:
@@ -55,10 +58,10 @@ def load_index():
         missing_files.append(METADATA_FILE)
 
     if missing_files:
-        print("❌ Missing required files:")
+        print(" Missing required files:")
         for file in missing_files:
             print(f"   • {file}")
-        print("\n🔧 To create these files:")
+        print("\n To create these files:")
         print("   python pdf_converter.py --create-embeddings")
         raise FileNotFoundError("Required A.N.A. Bot files not found")
 
@@ -67,11 +70,11 @@ def load_index():
         with open(METADATA_FILE, "r", encoding='utf-8') as f:
             documents = json.load(f)
 
-        print(f"✅ Loaded {len(documents)} document chunks")
+        print(f" Loaded {len(documents)} document chunks")
         return index, documents
 
     except Exception as e:
-        print(f"❌ Error loading files: {e}")
+        print(f" Error loading files: {e}")
         raise
 
 
@@ -79,20 +82,20 @@ def load_index():
 def initialize_system():
     """Initialize A.N.A. Bot system components."""
     try:
-        print("🚀 Starting A.N.A. Bot...")
+        print(" Starting A.N.A. Bot...")
 
         # Load pre-computed files
         index, documents = load_index()
 
         # Load embedding model (same as used in converter)
-        print("🧠 Loading embedding model...")
+        print(" Loading embedding model...")
         embedding_model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2", trust_remote_code=True)
 
-        print("✅ A.N.A. Bot ready!")
+        print(" A.N.A. Bot ready!")
         return index, documents, embedding_model
 
     except Exception as e:
-        print(f"❌ System initialization failed: {e}")
+        print(f" System initialization failed: {e}")
         return None, None, None
 
 
@@ -223,10 +226,10 @@ def create_interface():
         # System status
         if index and documents and embedding_model:
             status_color = "#10b981"  # Green
-            status_text = f"✅ Ready - {len(documents)} manual chunks loaded"
+            status_text = f" Ready - {len(documents)} manual chunks loaded"
         else:
             status_color = "#ef4444"  # Red
-            status_text = "❌ System not ready - Run pdf_converter.py --create-embeddings"
+            status_text = " System not ready - Run pdf_converter.py --create-embeddings"
 
         gr.HTML(f"""
             <div style="text-align: center; margin-bottom: 20px;">
@@ -298,17 +301,18 @@ def create_interface():
 # Launch the application
 if __name__ == "__main__":
     if not (index and documents and embedding_model):
-        print("\n🔧 Setup Required:")
+        print("\n Setup Required:")
         print("   1. Add PDF files to 'manuals/' folder")
         print("   2. Run: python pdf_converter.py --create-embeddings")
         print("   3. Then run: python ana_bot.py")
         exit(1)
 
-    print(f"\n🚀 Launching A.N.A. Bot interface...")
+    print(f"\n Launching A.N.A. Bot interface...")
     interface = create_interface()
     interface.launch(
         server_name="0.0.0.0",
         server_port=7860,
         share=True,
         debug=True
+
     )
